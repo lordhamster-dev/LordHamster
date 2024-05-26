@@ -1,9 +1,12 @@
 ---
+import type { Page } from "astro";
+
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import PostCard from "../../components/PostCard.astro";
 import Pagination from "../../components/Pagination.astro";
 import { getCollection } from "astro:content";
-export async function getStaticPaths({ paginate }) {
+
+export async function getStaticPaths({ paginate }: any) {
   const posts = (await getCollection("posts")).sort(
     (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
   );
@@ -12,7 +15,7 @@ export async function getStaticPaths({ paginate }) {
   });
 }
 const pageTitle = "All My Blogs";
-const { page } = Astro.props;
+const { page }: { page: Page } = Astro.props;
 ---
 
 <BaseLayout pageTitle={pageTitle}>
