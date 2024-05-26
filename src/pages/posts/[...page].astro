@@ -1,0 +1,37 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import PostCard from "../../components/PostCard.astro";
+import Pagination from "../../components/Pagination.astro";
+import { getCollection } from "astro:content";
+export async function getStaticPaths({ paginate }) {
+  const posts = (await getCollection("posts")).sort(
+    (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
+  );
+  return paginate(posts, {
+    pageSize: 9,
+  });
+}
+const pageTitle = "All My Blogs";
+const { page } = Astro.props;
+---
+
+<BaseLayout pageTitle={pageTitle}>
+  <div class="mx-auto max-w-screen-lg px-3 py-6">
+    <div class="text-center">
+      <h1 class="text-3xl font-bold">All My Blogs</h1>
+      <div class="mt-3 text-gray-200">Please have a look!</div>
+    </div>
+  </div>
+  <div class="mx-auto max-w-screen-lg px-3 py-6">
+    <div class="grid grid-cols-1 gap-6 md:grid-cols-3">
+      {
+        page.data.map((post: any) => (
+          <PostCard url={"/posts/" + post.slug} data={post.data} />
+        ))
+      }
+    </div>
+  </div>
+  <div class="mx-auto max-w-screen-lg px-3 py-6">
+    <Pagination prevUrl={page.url.prev} nextUrl={page.url.next} />
+  </div>
+</BaseLayout>

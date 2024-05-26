@@ -1,0 +1,35 @@
+---
+const { tag } = Astro.props;
+const fuchsia = ["Astro"];
+const sky = ["Tools"];
+const rose = ["TypeScript"];
+const lime = ["Web"];
+const yellow = ["JavaScript"];
+const indigo = ["CSS", "Bootstrap", "Tailwind"];
+const all = [...fuchsia, ...sky, ...rose, ...lime, ...yellow, ...indigo];
+---
+
+<a
+  class:list={[
+    "rounded-md px-2 py-1 text-xs font-semibold hover:translate-y-1",
+    {
+      "bg-fuchsia-400": fuchsia.includes(tag),
+      "text-fuchsia-900": fuchsia.includes(tag),
+      "bg-sky-400": sky.includes(tag),
+      "text-sky-900": sky.includes(tag),
+      "bg-rose-400": rose.includes(tag),
+      "text-rose-900": rose.includes(tag),
+      "bg-lime-400": lime.includes(tag),
+      "text-lime-900": lime.includes(tag),
+      "bg-yellow-400": yellow.includes(tag),
+      "text-yellow-900": yellow.includes(tag),
+      "bg-indigo-400": indigo.includes(tag),
+      "text-indigo-900": indigo.includes(tag),
+      "bg-violet-400": !all.includes(tag),
+      "text-violet-900": !all.includes(tag),
+    },
+  ]}
+  href={`/tags/${tag}/`}
+>
+  {tag}
+</a>

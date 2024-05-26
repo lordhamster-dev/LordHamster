@@ -19,7 +19,6 @@ Features:
 - ✅ SEO-friendly with canonical URLs and OpenGraph data
 - ✅ Sitemap support
 - ✅ RSS Feed support
-- ✅ Markdown & MDX support
 
 ## 🚀 Project Structure
 
