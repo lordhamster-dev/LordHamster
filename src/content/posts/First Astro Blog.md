@@ -3,7 +3,7 @@ title: First Astro Blog
 date: 2022-08-18 17:08:49
 tags:
   - Astro
-banner: https://cdn.jsdelivr.net/gh/lordhamster-dv/imgs/img/2024/06/07/20240607103633.jpeg
+banner: https://cdn.jsdelivr.net/gh/lordhamster-dev/imgs/img/2024/06/07/20240607103633.jpeg
 ---
 
 Here is a sample of some basic Markdown syntax that can be used when writing Markdown content in Astro.
