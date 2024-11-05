@@ -2,6 +2,7 @@
 title: Archlinux with Hyprland
 date: 2024-11-05 14:01:38
 tags:
+  - archlinux
 banner: https://cdn.jsdelivr.net/gh/lordhamster-dev/imgs/img/2024/11/05/20241105140322.png
 ---
 
@@ -283,7 +284,7 @@ sudo pacman -S archlinuxcn-keyring
 ## Hyprland配套程式
 
 ```bash
-yay -S xorg xorg-xwayland xdg-desktop-portal-hyprland xdg-desktop-portal-gtk polkit-kde-agent qt5-wayland qt6-wayland qt5ct qt6ct nwg-look udiskie fcitx5-im fcitx5-chewing fcitx5-qt fcitx5-gtk fcitx5-chinese-addons
+yay -S xorg xorg-xwayland xdg-desktop-portal-hyprland xdg-desktop-portal-gtk polkit-kde-agent qt5-wayland qt6-wayland qt5ct qt6ct nwg-look udiskie fcitx5-im fcitx5-pinyin-zhwiki fcitx5-qt fcitx5-gtk fcitx5-chinese-addons
 ```
 
 這些套件功能如下：
