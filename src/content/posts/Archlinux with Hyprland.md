@@ -2,7 +2,8 @@
 title: Archlinux with Hyprland
 date: 2024-11-05 14:01:38
 tags:
-  - archlinux
+  - Archlinux
+  - Hyprland
 banner: https://cdn.jsdelivr.net/gh/lordhamster-dev/imgs/img/2024/11/05/20241105140322.png
 ---
 
@@ -28,8 +29,8 @@ archinstall
 
 ## First
 
-- 首先进入Hyprland系统，会自动初始化Hyprland配置,然后`Super + M`退出Hyprland
-- `CTRL + ALT + F3`登录命令行系统,修改Hyprland的默认配置，消除警告
+- 首先进入Hyprland系统，会自动初始化Hyprland配置,然后<kbd>Super</kbd> + <kbd>M</kbd>退出Hyprland
+- <kbd>CTRL</kbd> + <kbd>ALT</kbd> + <kbd>F3</kbd>登录命令行系统,修改Hyprland的默认配置，消除警告
 
 ## 初始操作
 
