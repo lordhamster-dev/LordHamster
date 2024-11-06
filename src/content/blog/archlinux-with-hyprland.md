@@ -5,7 +5,8 @@ pubDatetime: 2024-11-05 15:32:00
 featured: true
 draft: false
 tags:
-  - linux
+  - ArchLinux
+  - Hyprland
 description: ""
 ---
 
