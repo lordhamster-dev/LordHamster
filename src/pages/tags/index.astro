@@ -1,23 +1,24 @@
 ---
-import BaseLayout from "../../layouts/BaseLayout.astro";
-import Tag from "../../components/Tag.astro";
 import { getCollection } from "astro:content";
-const allPosts = await getCollection("posts");
-const tags = [...new Set(allPosts.map((post) => post.data.tags).flat())];
-const pageTitle = "All Tags";
+import Header from "@components/Header.astro";
+import Footer from "@components/Footer.astro";
+import Layout from "@layouts/Layout.astro";
+import Main from "@layouts/Main.astro";
+import Tag from "@components/Tag.astro";
+import getUniqueTags from "@utils/getUniqueTags";
+import { SITE } from "@config";
+
+const posts = await getCollection("blog");
+
+let tags = getUniqueTags(posts);
 ---
 
-<BaseLayout pageTitle={pageTitle}>
-  <div class="mx-auto max-w-screen-lg px-3 py-6">
-    <div class="text-center">
-      <h1 class="text-3xl font-bold">All Tags</h1>
-    </div>
-  </div>
-  <div class="mx-auto max-w-screen-lg px-3 py-6">
-    <div class="grid grid-cols-1 gap-6 md:grid-cols-3">
-      <div class="ml-3 flex gap-2">
-        {tags.map((tag) => <Tag tag={tag} />)}
-      </div>
-    </div>
-  </div>
-</BaseLayout>
+<Layout title={`Tags | ${SITE.title}`}>
+  <Header activeNav="tags" />
+  <Main pageTitle="Tags" pageDesc="All the tags used in posts.">
+    <ul>
+      {tags.map(({ tag }) => <Tag {tag} size="lg" />)}
+    </ul>
+  </Main>
+  <Footer />
+</Layout>
