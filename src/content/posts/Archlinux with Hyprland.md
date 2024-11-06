@@ -32,14 +32,6 @@ archinstall
 - 首先进入Hyprland系统，会自动初始化Hyprland配置,然后<kbd>Super</kbd> + <kbd>M</kbd>退出Hyprland
 - <kbd>CTRL</kbd> + <kbd>ALT</kbd> + <kbd>F3</kbd>登录命令行系统,修改Hyprland的默认配置，消除警告
 
-## 初始操作
-
-```bash
-sudo pacman-key --init
-sudo pacman-key --populate archlinux
-sudo pacman -Syy archlinux-keyring
-```
-
 ## 系统时间和 NTP 服务器同步
 
 ```bash
@@ -50,7 +42,7 @@ sudo timedatectl status
 ## 安装一些常用的工具包
 
 ```bash
-sudo pacman -S git vi vim inetutils iproute2 iputils procps-ng psmisc sysfsutils which wget unzip mtr traceroute dnsutils lsb-release ca-certificates bash-completion logrotate openssh less rsync sdl2_ttf sdl2_image
+sudo pacman -S git base-devel vi vim inetutils iproute2 iputils procps-ng psmisc sysfsutils which wget unzip mtr traceroute dnsutils lsb-release ca-certificates bash-completion logrotate openssh less rsync sdl2_ttf sdl2_image
 ```
 
 部分软件是需要自行开启并设置开机自启动的，比如 `OpenSSH`：
@@ -157,7 +149,7 @@ fc-cache -fv
 
 > `reboot` 重启
 
-# 配置clash
+# Clash
 
 ## Install clash
 
@@ -173,59 +165,6 @@ clash
 
 会自动下载`Country.mmdb`，失败就多试几次
 
-## 自动启动clash
-
-创建 systemd 配置文件 /etc/systemd/system/clash.service
-
-```bash
-sudo vim /etc/systemd/system/clash.service
-```
-
-加入以下内容
-
-```txt
-[Unit]
-Description=Clash daemon, A rule-based proxy in Go.
-After=network.target
-
-[Service]
-Type=simple
-Restart=always
-ExecStart=/usr/bin/clash -d /home/lordhamster/.config/clash
-
-[Install]
-WantedBy=multi-user.target
-```
-
-添加 Clash 至守护进程
-
-```bash
-sudo systemctl enable clash
-```
-
-立即启动 Clash
-
-```bash
-sudo systemctl start clash
-```
-
-其他 systemd 命令：
-
-- 重新启动 Clash
-
-```bash
-sudo systemctl restart clash
-```
-
-- 获取 Clash 日志
-
-```bash
-systemctl status clash
-# 或者
-journalctl -xe
-
-```
-
 > clash配置网页`https://clash.razord.top/`
 
 ## 设置shell代理
@@ -238,23 +177,65 @@ export socks_proxy=127.0.0.1:7890
 
 > firefox可以通过settings设置代理
 
+# Supervisor
+
+## 1. 安装 `supervisor`
+
+使用 `pacman` 命令来安装：
+
+```bash
+sudo pacman -S supervisor
+```
+
+## 2. 启用 `supervisord` 服务
+
+安装完成后，使用以下命令启动并启用 `supervisord` 服务：
+
+```bash
+sudo systemctl enable supervisord
+sudo systemctl start supervisord
+```
+
+## 3. 创建进程配置文件
+
+在 `/etc/supervisord.d/` 目录下，创建进程配置文件。例如，如果要管理一个叫 `clash` 的应用，创建文件 `/etc/supervisord.d/clash.ini`：
+
+```ini
+[program:clash]
+command=/usr/bin/clash -d /home/lordhamster/.config/clash
+autostart=true
+autorestart=true
+stderr_logfile=/var/log/clash.log
+stdout_logfile=/var/log/clash.log
+```
+
+- `command`：指定要运行的命令或脚本的路径。
+- `autostart`：设置 `true` 表示在 `supervisord` 启动时自动启动该进程。
+- `autorestart`：设置 `true` 表示在进程意外退出时自动重启。
+- `stderr_logfile` 和 `stdout_logfile`：指定标准错误和标准输出的日志文件路径。
+
+## 4. 重启 `supervisor` 服务
+
+添加或修改配置后，重启 `supervisord` 以应用更改：
+
+```bash
+sudo systemctl restart supervisord
+```
+
+## 5. 管理进程
+
+可以使用 `supervisorctl` 命令来管理各个进程。例如：
+
+```bash
+sudo supervisorctl status
+sudo supervisorctl start clash
+sudo supervisorctl stop clash
+sudo supervisorctl restart clash
+```
+
 # 安装AUR包管理工具yay
 
 ```bash
-sudo pacman -S base-devel git
-cd ~
-mkdir -p .local
-mkdir -p .local/opt
-cd .local/opt
-git clone https://aur.archlinux.org/yay.git
-cd yay
-makepkg -si
-```
-
-也可以直接安装打包好的二进制包：
-
-```bash
-sudo pacman -S git base-devel
 cd ~
 mkdir -p .local
 mkdir -p .local/opt
@@ -285,7 +266,7 @@ sudo pacman -S archlinuxcn-keyring
 ## Hyprland配套程式
 
 ```bash
-yay -S xorg xorg-xwayland xdg-desktop-portal-hyprland xdg-desktop-portal-gtk polkit-kde-agent qt5-wayland qt6-wayland qt5ct qt6ct nwg-look udiskie fcitx5-im fcitx5-pinyin-zhwiki fcitx5-qt fcitx5-gtk fcitx5-chinese-addons
+yay -S fcitx5-im fcitx5-pinyin-zhwiki fcitx5-qt fcitx5-gtk fcitx5-chinese-addons xorg xorg-xwayland xdg-desktop-portal-hyprland xdg-desktop-portal-gtk qt5-wayland qt6-wayland qt5ct qt6ct nwg-look
 ```
 
 這些套件功能如下：
@@ -296,8 +277,6 @@ yay -S xorg xorg-xwayland xdg-desktop-portal-hyprland xdg-desktop-portal-gtk pol
 - qt5-wayland ,qt6-wayland 讓QT程式支援Wayland
 - qt5ct, qt6ct 設定QT程式主題
 - nwg-look：設定GTK程式主題
-- polkit-kde-agent 密碼驗證對話框
-- udiskie 自動掛載隨身碟
 
 ## 编辑Hyprland配置
 
@@ -307,8 +286,6 @@ vim ~/.config/hypr/hyprland.conf
 
 ```txt
 exec-once = fcitx5 -d  --replace
-exec-once = /usr/lib/polkit-kde-authentication-agent-1
-exec-once = udiskie &
 
 
 env = GTK_IM_MODULE, fcitx
