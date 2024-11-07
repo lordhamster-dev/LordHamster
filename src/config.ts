@@ -57,9 +57,9 @@ export const profileConfig: ProfileConfig = {
             url: "https://github.com/lordhamster-dev",
         },
         {
-            name: "Steam",
-            icon: "fa6-brands:steam",
-            url: "https://store.steampowered.com",
+            name: "Mail",
+            icon: "fa6-solid:envelope",
+            url: "mailto:zhaojinbiao@lordhamster.com",
         },
     ],
 };
