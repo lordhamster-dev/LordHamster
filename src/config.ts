@@ -1,143 +1,71 @@
-import type { Site, SocialObjects } from "./types";
+import type { LicenseConfig, NavBarConfig, ProfileConfig, SiteConfig } from "./types/config";
+import { LinkPreset } from "./types/config";
 
-export const SITE: Site = {
-	website: "https://lordhamster.com",
-	author: "LordHamster",
-	profile: "https://lordhamster.com",
-	desc: "A minimal, responsive and SEO-friendly Astro blog theme.",
-	title: "LordHamster's Blog",
-	ogImage: "astropaper-og.jpg",
-	lightAndDarkMode: true,
-	postPerIndex: 4,
-	postPerPage: 5,
-	scheduledPostMargin: 15 * 60 * 1000, // 15 minutes
-	showArchives: true,
+export const siteConfig: SiteConfig = {
+    title: "LordHamster's Blog",
+    subtitle: "Little Blog",
+    lang: "zh_CN", // 'en', 'zh_CN', 'zh_TW', 'ja', 'ko'
+    themeColor: {
+        hue: 250, // Default hue for the theme color, from 0 to 360. e.g. red: 0, teal: 200, cyan: 250, pink: 345
+        fixed: false, // Hide the theme color picker for visitors
+    },
+    banner: {
+        enable: false,
+        src: "", // Relative to the /src directory. Relative to the /public directory if it starts with '/'
+        position: "center", // Equivalent to object-position, only supports 'top', 'center', 'bottom'. 'center' by default
+        credit: {
+            enable: false, // Display the credit text of the banner image
+            text: "", // Credit text to be displayed
+            url: "", // (Optional) URL link to the original artwork or artist's page
+        },
+    },
+    toc: {
+        enable: true, // Display the table of contents on the right side of the post
+        depth: 2, // Maximum heading depth to show in the table, from 1 to 3
+    },
+    favicon: [
+        // Leave this array empty to use the default favicon
+        //{
+        //    src: "/favicon/icon.png", // Path of the favicon, relative to the /public directory
+        //    theme: "light", // (Optional) Either 'light' or 'dark', set only if you have different favicons for light and dark mode
+        //    sizes: "32x32", // (Optional) Size of the favicon, set only if you have favicons of different sizes
+        //},
+    ],
 };
 
-export const LOCALE = {
-	lang: "zh", // html lang code. Set this empty and default will be "en"
-	langTag: ["zh-CN"], // BCP 47 Language Tags. Set this empty [] to use the environment default
-} as const;
+export const navBarConfig: NavBarConfig = {
+    links: [
+        LinkPreset.Home,
+        LinkPreset.Archive,
+        LinkPreset.About,
+        {
+            name: "GitHub",
+            url: "https://github.com/lordhamster-dev", // Internal links should not include the base path, as it is automatically added
+            external: true, // Show an external link icon and will open in a new tab
+        },
+    ],
+};
 
-export const SOCIALS: SocialObjects = [
-	{
-		name: "Github",
-		href: "https://github.com/lordhamster-dev",
-		linkTitle: ` ${SITE.title} on Github`,
-		active: true,
-	},
-	{
-		name: "Facebook",
-		href: "https://github.com/satnaing/astro-paper",
-		linkTitle: `${SITE.title} on Facebook`,
-		active: false,
-	},
-	{
-		name: "Instagram",
-		href: "https://github.com/satnaing/astro-paper",
-		linkTitle: `${SITE.title} on Instagram`,
-		active: false,
-	},
-	{
-		name: "LinkedIn",
-		href: "https://github.com/satnaing/astro-paper",
-		linkTitle: `${SITE.title} on LinkedIn`,
-		active: false,
-	},
-	{
-		name: "Mail",
-		href: "mailto:zhaojinbiao@lordhamster.com",
-		linkTitle: `Send an email to ${SITE.title}`,
-		active: true,
-	},
-	{
-		name: "X",
-		href: "https://github.com/satnaing/astro-paper",
-		linkTitle: `${SITE.title} on X`,
-		active: false,
-	},
-	{
-		name: "Twitch",
-		href: "https://github.com/satnaing/astro-paper",
-		linkTitle: `${SITE.title} on Twitch`,
-		active: false,
-	},
-	{
-		name: "YouTube",
-		href: "https://www.youtube.com/@lordhamster-dev",
-		linkTitle: `${SITE.title} on YouTube`,
-		active: true,
-	},
-	{
-		name: "WhatsApp",
-		href: "https://github.com/satnaing/astro-paper",
-		linkTitle: `${SITE.title} on WhatsApp`,
-		active: false,
-	},
-	{
-		name: "Snapchat",
-		href: "https://github.com/satnaing/astro-paper",
-		linkTitle: `${SITE.title} on Snapchat`,
-		active: false,
-	},
-	{
-		name: "Pinterest",
-		href: "https://github.com/satnaing/astro-paper",
-		linkTitle: `${SITE.title} on Pinterest`,
-		active: false,
-	},
-	{
-		name: "TikTok",
-		href: "https://github.com/satnaing/astro-paper",
-		linkTitle: `${SITE.title} on TikTok`,
-		active: false,
-	},
-	{
-		name: "CodePen",
-		href: "https://github.com/satnaing/astro-paper",
-		linkTitle: `${SITE.title} on CodePen`,
-		active: false,
-	},
-	{
-		name: "Discord",
-		href: "https://github.com/satnaing/astro-paper",
-		linkTitle: `${SITE.title} on Discord`,
-		active: false,
-	},
-	{
-		name: "GitLab",
-		href: "https://github.com/satnaing/astro-paper",
-		linkTitle: `${SITE.title} on GitLab`,
-		active: false,
-	},
-	{
-		name: "Reddit",
-		href: "https://github.com/satnaing/astro-paper",
-		linkTitle: `${SITE.title} on Reddit`,
-		active: false,
-	},
-	{
-		name: "Skype",
-		href: "https://github.com/satnaing/astro-paper",
-		linkTitle: `${SITE.title} on Skype`,
-		active: false,
-	},
-	{
-		name: "Steam",
-		href: "https://github.com/satnaing/astro-paper",
-		linkTitle: `${SITE.title} on Steam`,
-		active: false,
-	},
-	{
-		name: "Telegram",
-		href: "https://github.com/satnaing/astro-paper",
-		linkTitle: `${SITE.title} on Telegram`,
-		active: false,
-	},
-	{
-		name: "Mastodon",
-		href: "https://github.com/satnaing/astro-paper",
-		linkTitle: `${SITE.title} on Mastodon`,
-		active: false,
-	},
-];
+export const profileConfig: ProfileConfig = {
+    avatar: "https://cdn.jsdelivr.net/gh/lordhamster-dev/imgs/img/2024/06/07/20240607101001.png", // Relative to the /src directory. Relative to the /public directory if it starts with '/'
+    name: "LordHamster",
+    bio: "Never forget why you started!",
+    links: [
+        {
+            name: "GitHub",
+            icon: "fa6-brands:github",
+            url: "https://github.com/lordhamster-dev",
+        },
+        {
+            name: "Steam",
+            icon: "fa6-brands:steam",
+            url: "https://store.steampowered.com",
+        },
+    ],
+};
+
+export const licenseConfig: LicenseConfig = {
+    enable: true,
+    name: "CC BY-NC-SA 4.0",
+    url: "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+};
