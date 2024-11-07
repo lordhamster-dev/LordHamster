@@ -297,6 +297,14 @@ env = XMODIFIERS, @im=fcitx
 
 - https://hyprpanel.com/getting_started/installation.html
 
+### 安装aylurs-gtk-shell-git报错
+
+可能是npm网络问题，设置下代理即可
+
+```bash
+npm config set proxy=http://127.0.0.1:7890
+```
+
 # Backup
 
 ```bash
