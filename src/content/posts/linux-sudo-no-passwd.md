@@ -21,3 +21,9 @@ username ALL=(ALL:ALL) NOPASSWD:ALL
 
 - 之后 `ctrl` + `o` ,然后 `ctrl` + `x`
 - 注销重新登录之后，不用再输入sudo密码了。
+
+## Archlinux需要添加如下内容
+
+```bash
+Defaults:username      !authenticate
+```
