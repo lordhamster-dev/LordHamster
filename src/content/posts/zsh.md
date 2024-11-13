@@ -3,7 +3,7 @@ title: zsh安装和配置
 published: 2024-11-12
 description: "zsh安装和配置"
 tags: []
-category: Linux
+category: Tool
 draft: false
 ---
 
