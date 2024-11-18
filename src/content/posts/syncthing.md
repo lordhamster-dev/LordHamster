@@ -2,7 +2,7 @@
 title: Syncthing
 published: 2024-11-18
 description: "Syncthing 是一款开源、轻量级的文件同步工具，适合在多设备间无缝同步文件。"
-tags: []
+tags: [Archlinux, Ubuntu]
 category: Tool
 draft: false
 ---
