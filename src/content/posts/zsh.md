@@ -1,5 +1,5 @@
 ---
-title: zsh安装和配置
+title: Zsh
 published: 2024-11-12
 description: "zsh安装和配置"
 tags: []
