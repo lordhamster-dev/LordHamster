@@ -2,8 +2,7 @@
 title: Linux sudo no passwd
 published: 2024-11-08
 description: "Linux sudo 免密码"
-tags: []
-category: Linux
+tags: [Linux]
 draft: false
 ---
 

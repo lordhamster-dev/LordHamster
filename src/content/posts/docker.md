@@ -2,8 +2,7 @@
 title: Docker
 published: 2024-11-13
 description: "Docker安装和使用"
-tags: [Archlinux, Ubuntu]
-category: Tool
+tags: [Tool]
 draft: false
 ---
 

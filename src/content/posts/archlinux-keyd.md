@@ -1,9 +1,8 @@
 ---
-title: Archlinux安装Keyd
+title: Archlinux install Keyd
 published: 2024-11-20
-description: "Archlinux安装Keyd: A key remapping daemon for linux."
-tags: [Archlinux]
-category: Linux
+description: "Keyd: A key remapping daemon for linux."
+tags: [Archlinux, Tool]
 draft: false
 ---
 

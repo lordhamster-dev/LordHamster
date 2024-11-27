@@ -2,8 +2,7 @@
 title: Supervisor
 published: 2024-11-07
 description: ""
-tags: []
-category: Tool
+tags: [Tool]
 draft: false
 ---
 
