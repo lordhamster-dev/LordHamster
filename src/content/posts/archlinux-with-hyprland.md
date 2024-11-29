@@ -31,6 +31,38 @@ archinstall
 - 首先进入Hyprland系统，会自动初始化Hyprland配置,然后 `Super` + `M` 退出Hyprland
 - `CTRL` + `ALT` + `F3` 登录命令行系统,修改Hyprland的默认配置，消除警告
 
+## 初始操作
+
+```bash
+sudo pacman-key --init
+sudo pacman-key --populate archlinux
+sudo pacman -Syy archlinux-keyring
+```
+
+### 1. **`sudo pacman-key --init`**
+
+- 初始化 `pacman` 的密钥环。
+- 此命令会创建 GPG 密钥环的基础结构，确保系统拥有正确的配置来验证软件包的签名。它会生成密钥环文件，并准备好用于后续的密钥操作。
+- 你通常会在第一次安装 Arch Linux 或重新配置密钥时执行此命令。
+
+### 2. **`sudo pacman-key --populate archlinux`**
+
+- 填充 `pacman` 密钥环，导入 Arch Linux 官方密钥。
+- 该命令将 Arch Linux 官方的 GPG 密钥添加到密钥环中。这些密钥用于验证软件包是否来自于官方仓库并确保它们的完整性和真实性。执行此命令后，你的系统将会有一个完整的密钥列表，可以用来验证包的签名。
+- 如果你遇到由于 GPG 密钥问题导致的包验证错误，执行这个命令是解决问题的常见方法。
+
+### 3. `sudo pacman -Syy archlinux-keyring`
+
+- 这是一个包含 Arch Linux 签名密钥的包。系统使用这些密钥来验证软件包的真实性和完整性。如果密钥过期或损坏，可能导致包管理器无法验证软件包。
+- **`-S`**: 这个选项表示安装软件包或同步软件包数据库。`pacman -S` 后面跟着的是你要安装的包名。
+- **`-yy`**: 这是两个 `y`，表示强制更新本地包数据库并从镜像源重新获取所有软件包信息。通常，`pacman -Sy` 会更新包数据库，但使用 `-yy` 会忽略本地缓存，强制重新同步。
+- 它会强制更新 Arch Linux 的密钥环，以确保你的系统拥有最新的密钥，这对包的签名验证是必须的。通常，如果你遇到密钥过期或者出现包验证错误的情况，执行这个命令会有所帮助。
+
+### 小提示：
+
+- **初始化密钥环**：如果你遇到 "No valid OpenPGP data found" 或者类似的错误，系统可能缺少密钥环，或者密钥环未初始化。运行 `sudo pacman-key --init` 来初始化密钥环。
+- **导入 Arch Linux 密钥**：如果密钥环已初始化，但仍然遇到签名问题（例如密钥过期或丢失），运行 `sudo pacman-key --populate archlinux` 将会导入官方的 GPG 密钥，解决签名错误。
+
 ## 系统时间和 NTP 服务器同步
 
 ```bash
