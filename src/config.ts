@@ -32,21 +32,26 @@ export const siteConfig: SiteConfig = {
 	favicon: [
 		// Leave this array empty to use the default favicon
 		{
-		  src: "/favicon/lordhamster_head.png",    // Path of the favicon, relative to the /public directory
-		  theme: 'dark',              // (Optional) Either 'light' or 'dark', set only if you have different favicons for light and dark mode
-		  sizes: '32x32',              // (Optional) Size of the favicon, set only if you have favicons of different sizes
-		}
+			src: "/favicon/lordhamster_head.png", // Path of the favicon, relative to the /public directory
+			theme: "dark", // (Optional) Either 'light' or 'dark', set only if you have different favicons for light and dark mode
+			sizes: "32x32", // (Optional) Size of the favicon, set only if you have favicons of different sizes
+		},
 	],
 };
 
 export const navBarConfig: NavBarConfig = {
-	links: [LinkPreset.Home, LinkPreset.Archive, LinkPreset.About],
+	links: [
+		LinkPreset.Home,
+		LinkPreset.Archive,
+		LinkPreset.Memos,
+		LinkPreset.About,
+	],
 };
 
 export const profileConfig: ProfileConfig = {
 	avatar: "assets/images/lordhamster_head.png", // Relative to the /src directory. Relative to the /public directory if it starts with '/'
 	name: "LordHamster",
-  bio: "Never forget why you started!",
+	bio: "Never forget why you started!",
 	links: [
 		{
 			name: "GitHub",

@@ -1,0 +1,287 @@
+---
+import I18nKey from "../i18n/i18nKey";
+import { i18n } from "../i18n/translation";
+import MainGridLayout from "../layouts/MainGridLayout.astro";
+---
+<MainGridLayout title={i18n(I18nKey.memos)} description={i18n(I18nKey.memos)}>
+    <div class="flex w-full rounded-[var(--radius-large)] overflow-hidden relative min-h-96">
+        <div class="card-base z-10 px-9 py-6 relative w-full">
+            <h1 class="text-3xl font-bold mb-6 text-neutral-900 dark:text-neutral-100">
+                {i18n(I18nKey.memos)}
+            </h1>
+
+            <div class="mb-6 text-neutral-700 dark:text-neutral-300">
+                <p class="mb-4">
+                    这里是我的公开 Memos，记录生活中的点滴想法和有趣瞬间。
+                </p>
+            </div>
+
+            <div id="memos-container" class="space-y-4">
+                <div class="text-center py-8 text-neutral-500">
+                    加载中...
+                </div>
+            </div>
+
+            <div id="load-more-container" class="mt-8 text-center hidden">
+                <button
+                    id="load-more-btn"
+                    class="inline-flex items-center gap-2 px-6 py-3 bg-[var(--primary)] text-white rounded-lg hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                    <span id="load-more-text">加载更多</span>
+                    <svg id="load-more-spinner" class="hidden animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+</MainGridLayout>
+
+<script>
+    // @ts-ignore - markdown-it doesn't have proper ESM types
+    import MarkdownIt from 'markdown-it';
+
+    // Initialize markdown parser
+    const md = new MarkdownIt({
+        html: true,
+        linkify: true,
+        breaks: true,
+    });
+
+    // Fetch public memos from the API
+    const memosApiBaseUrl = 'https://memos.lordhamster.com/api/v1/memos';
+    let nextPageToken = '';
+    let isLoading = false;
+
+    interface Memo {
+        name: string;
+        content: string;
+        createTime: string;
+        updateTime: string;
+        displayTime: string;
+        visibility: string;
+        attachments?: Array<{
+            name: string;
+            filename: string;
+            type: string;
+            size: string;
+            memo: string;
+        }>;
+    }
+
+    interface MemosResponse {
+        memos: Memo[];
+        nextPageToken?: string;
+    }
+
+    function renderMemo(memo: Memo): string {
+        // Parse ISO 8601 date format
+        const date = new Date(memo.displayTime || memo.createTime);
+        const formattedDate = date.toLocaleString('zh-CN', {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+
+        // Process content: render markdown to HTML
+        let processedContent = md.render(memo.content);
+
+        // Add styling classes to generated links
+        processedContent = processedContent.replace(
+            /<a href=/g,
+            '<a class="text-[var(--primary)] hover:underline" target="_blank" rel="noopener noreferrer" href='
+        );
+
+        // Handle attachments (images, files)
+        let resourcesHtml = '';
+        if (memo.attachments && memo.attachments.length > 0) {
+            const images = memo.attachments.filter(a => a.type.startsWith('image/'));
+            if (images.length > 0) {
+                resourcesHtml = `
+                    <div class="memo-content mt-4 grid gap-2 ${images.length === 1 ? 'grid-cols-1' : 'grid-cols-2'}">
+                        ${images.map(img => {
+                            // Build image URL from attachment name
+                            const imgUrl = `https://memos.lordhamster.com/file/${img.name}/${img.filename}`;
+                            return `
+                                <img
+                                    src="${imgUrl}"
+                                    alt="${img.filename}"
+                                    class="rounded-lg w-full object-cover max-h-64 cursor-pointer hover:opacity-90 transition-opacity"
+                                    loading="lazy"
+                                />
+                            `;
+                        }).join('')}
+                    </div>
+                `;
+            }
+        }
+
+        return `
+            <div class="memo-card p-5 bg-neutral-50 dark:bg-neutral-800/50 rounded-lg border border-neutral-200 dark:border-neutral-700 hover:border-[var(--primary)] transition-colors">
+                <div class="memo-content prose dark:prose-invert prose-sm max-w-none mb-3">
+                    ${processedContent}
+                </div>
+                ${resourcesHtml}
+                <div class="memo-meta text-sm text-neutral-500 dark:text-neutral-400 flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd" />
+                    </svg>
+                    ${formattedDate}
+                </div>
+            </div>
+        `;
+    }
+
+    async function loadMemos(append = false) {
+        const memosContainer = document.getElementById('memos-container');
+        const loadMoreContainer = document.getElementById('load-more-container');
+        const loadMoreBtn = document.getElementById('load-more-btn') as HTMLButtonElement;
+        const loadMoreText = document.getElementById('load-more-text');
+        const loadMoreSpinner = document.getElementById('load-more-spinner');
+
+        if (!memosContainer) return;
+        if (isLoading) return;
+
+        isLoading = true;
+
+        // Show loading state on button
+        if (append && loadMoreBtn && loadMoreText && loadMoreSpinner) {
+            loadMoreBtn.disabled = true;
+            loadMoreText.textContent = '加载中...';
+            loadMoreSpinner.classList.remove('hidden');
+        }
+
+        try {
+            const url = new URL(memosApiBaseUrl);
+            url.searchParams.set('rowStatus', 'NORMAL');
+            url.searchParams.set('visibility', 'PUBLIC');
+            url.searchParams.set('pageSize', '10');
+            if (nextPageToken) {
+                url.searchParams.set('pageToken', nextPageToken);
+            }
+
+            const response = await fetch(url.toString());
+            if (!response.ok) {
+                throw new Error('Failed to fetch memos');
+            }
+
+            const data: MemosResponse = await response.json();
+            const memos = data.memos || [];
+
+            if (!append && memos.length === 0) {
+                memosContainer.innerHTML = `
+                    <div class="text-center py-8 text-neutral-500">
+                        暂无公开 Memos
+                    </div>
+                `;
+                if (loadMoreContainer) loadMoreContainer.classList.add('hidden');
+                return;
+            }
+
+            // Render memos
+            const memosHtml = memos.map(memo => renderMemo(memo)).join('');
+
+            if (append) {
+                memosContainer.insertAdjacentHTML('beforeend', memosHtml);
+            } else {
+                memosContainer.innerHTML = memosHtml;
+            }
+
+            // Reinitialize PhotoSwipe for newly loaded images
+            if (typeof window !== 'undefined' && (window as any).swup) {
+                // Trigger photoswipe re-initialization
+                window.dispatchEvent(new CustomEvent('memos:loaded'));
+            }
+
+            // Update pagination state
+            nextPageToken = data.nextPageToken || '';
+
+            // Show/hide load more button
+            if (loadMoreContainer) {
+                if (nextPageToken) {
+                    loadMoreContainer.classList.remove('hidden');
+                } else {
+                    loadMoreContainer.classList.add('hidden');
+                }
+            }
+
+        } catch (error) {
+            console.error('Error loading memos:', error);
+            if (!append) {
+                memosContainer.innerHTML = `
+                    <div class="text-center py-8 text-red-500 dark:text-red-400">
+                        加载 Memos 失败，请稍后重试
+                    </div>
+                `;
+            }
+        } finally {
+            isLoading = false;
+
+            // Reset button state
+            if (append && loadMoreBtn && loadMoreText && loadMoreSpinner) {
+                loadMoreBtn.disabled = false;
+                loadMoreText.textContent = '加载更多';
+                loadMoreSpinner.classList.add('hidden');
+            }
+        }
+    }
+
+    function setupLoadMore() {
+        const loadMoreBtn = document.getElementById('load-more-btn');
+        if (loadMoreBtn) {
+            loadMoreBtn.addEventListener('click', () => {
+                loadMemos(true);
+            });
+        }
+    }
+
+    function init() {
+        nextPageToken = '';
+        isLoading = false;
+        setupLoadMore();
+        loadMemos(false);
+    }
+
+    // Load memos on initial page load
+    init();
+
+    // Reload memos when navigating via Swup (page transitions)
+    document.addEventListener('swup:enable', () => {
+        init();
+    });
+
+    // Also handle page view events (after content replacement)
+    if (window?.swup?.hooks) {
+        window.swup.hooks.on('page:view', () => {
+            init();
+        });
+    }
+</script>
+
+<style>
+    .memo-card {
+        animation: fadeIn 0.3s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .memo-content :global(a) {
+        text-decoration: none;
+    }
+
+    .memo-content :global(a:hover) {
+        text-decoration: underline;
+    }
+</style>
