@@ -4,6 +4,7 @@ published: 2024-04-01
 description: "How to use this blog template."
 image: "https://cdn.jsdelivr.net/gh/lordhamster-dev/imgs/img/2024/11/07/20241107103811.jpeg"
 tags: [Blog]
+category: Guide 
 draft: true
 ---
 
