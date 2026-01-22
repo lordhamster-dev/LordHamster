@@ -245,19 +245,25 @@ import MainGridLayout from "../layouts/MainGridLayout.astro";
         loadMemos(false);
     }
 
-    // Load memos on initial page load
-    init();
-
-    // Reload memos when navigating via Swup (page transitions)
-    document.addEventListener('swup:enable', () => {
-        init();
-    });
-
-    // Also handle page view events (after content replacement)
-    if (window?.swup?.hooks) {
+    function setup() {
+        // Handle page view events for subsequent navigations
         window.swup.hooks.on('page:view', () => {
-            init();
+            if (window.location.pathname.includes('/memos')) {
+                init();
+            }
         });
+    }
+
+    // Initial load - check if we're on the memos page
+    if (window.location.pathname.includes('/memos')) {
+        init();
+    }
+
+    // Setup Swup listeners
+    if (window.swup) {
+        setup();
+    } else {
+        document.addEventListener('swup:enable', setup);
     }
 </script>
 
