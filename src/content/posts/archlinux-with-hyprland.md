@@ -1,14 +1,44 @@
 ---
-title: Archlinux with Hyprland
+title: 我的ArchLinux Hyprland配置指南
 published: 2024-11-05
-description: ""
-tags: [Archlinux, Hyprland]
+description: 从零开始配置现代化Arch Linux桌面环境：涵盖Hyprland安装、中文输入法设置、系统美化到代理配置的全流程指南。包含详细的软件包选择和实用工具推荐，助你打造高效美观的Wayland桌面体验。
+category: 技术 
+tags: [linux, hyprland]
 draft: false
 ---
 
-# Install
+## Install
 
-首先确保网络连接正常
+首先确保网络连接正常,
+
+### wifi连接
+
+#### 禁用reflector服务,避免时不时自动切换一些用不了的源
+
+```bash
+systemctl stop reflector.service
+```
+
+#### 使用 iwctl 连接 WiFi
+
+```bash
+iwctl # 进入交互式命令行
+device list # 列出无线网卡设备名，比如无线网卡看到叫 wlan0
+station wlan0 scan # 扫描网络
+station wlan0 get-networks # 列出所有 wifi 网络
+station wlan0 connect wifi-name # 进行连接，注意这里无法输入中文。回车后输入密码即可
+exit # 连接成功后退出
+```
+
+#### 检查连接情况
+
+```bash
+ping www.baidu.com
+```
+
+如果能 ping 通，说明联网成功。
+
+### archinstall
 
 然后执行命令
 
@@ -17,21 +47,20 @@ archinstall
 ```
 
 - 镜像搜索选择China
-- 使用推荐的硬盘分区，/home目录是否单独分区可以按需选择
-- bootloader选择grub,兼容性会好一些
-- 内核可以选择linux-zen
-- 桌面环境选择Hyprland
+- 使用推荐的硬盘分区
 
 > 系统装好后，重启
 
-# Setup
+## Setup
 
-## First
+### 系统时间和 NTP 服务器同步
 
-- 首先进入Hyprland系统，会自动初始化Hyprland配置,然后 `Super` + `M` 退出Hyprland
-- `CTRL` + `ALT` + `F3` 登录命令行系统,修改Hyprland的默认配置，消除警告
+```bash
+sudo timedatectl set-ntp 1
+sudo timedatectl status
+```
 
-## 初始操作
+### 配置 Pacman 密钥环
 
 ```bash
 sudo pacman-key --init
@@ -39,41 +68,34 @@ sudo pacman-key --populate archlinux
 sudo pacman -Syy archlinux-keyring
 ```
 
-### 1. **`sudo pacman-key --init`**
+#### 1. **`sudo pacman-key --init`**
 
 - 初始化 `pacman` 的密钥环。
 - 此命令会创建 GPG 密钥环的基础结构，确保系统拥有正确的配置来验证软件包的签名。它会生成密钥环文件，并准备好用于后续的密钥操作。
 - 你通常会在第一次安装 Arch Linux 或重新配置密钥时执行此命令。
 
-### 2. **`sudo pacman-key --populate archlinux`**
+#### 2. **`sudo pacman-key --populate archlinux`**
 
 - 填充 `pacman` 密钥环，导入 Arch Linux 官方密钥。
 - 该命令将 Arch Linux 官方的 GPG 密钥添加到密钥环中。这些密钥用于验证软件包是否来自于官方仓库并确保它们的完整性和真实性。执行此命令后，你的系统将会有一个完整的密钥列表，可以用来验证包的签名。
 - 如果你遇到由于 GPG 密钥问题导致的包验证错误，执行这个命令是解决问题的常见方法。
 
-### 3. `sudo pacman -Syy archlinux-keyring`
+#### 3. **`sudo pacman -Syy archlinux-keyring`**
 
 - 这是一个包含 Arch Linux 签名密钥的包。系统使用这些密钥来验证软件包的真实性和完整性。如果密钥过期或损坏，可能导致包管理器无法验证软件包。
 - **`-S`**: 这个选项表示安装软件包或同步软件包数据库。`pacman -S` 后面跟着的是你要安装的包名。
 - **`-yy`**: 这是两个 `y`，表示强制更新本地包数据库并从镜像源重新获取所有软件包信息。通常，`pacman -Sy` 会更新包数据库，但使用 `-yy` 会忽略本地缓存，强制重新同步。
 - 它会强制更新 Arch Linux 的密钥环，以确保你的系统拥有最新的密钥，这对包的签名验证是必须的。通常，如果你遇到密钥过期或者出现包验证错误的情况，执行这个命令会有所帮助。
 
-### 小提示：
+#### 小提示：
 
 - **初始化密钥环**：如果你遇到 "No valid OpenPGP data found" 或者类似的错误，系统可能缺少密钥环，或者密钥环未初始化。运行 `sudo pacman-key --init` 来初始化密钥环。
 - **导入 Arch Linux 密钥**：如果密钥环已初始化，但仍然遇到签名问题（例如密钥过期或丢失），运行 `sudo pacman-key --populate archlinux` 将会导入官方的 GPG 密钥，解决签名错误。
 
-## 系统时间和 NTP 服务器同步
+### 安装一些常用的工具包
 
 ```bash
-sudo timedatectl set-ntp 1
-sudo timedatectl status
-```
-
-## 安装一些常用的工具包
-
-```bash
-sudo pacman -S git base-devel vi vim inetutils iproute2 iputils procps-ng psmisc sysfsutils which wget unzip mtr traceroute dnsutils lsb-release ca-certificates bash-completion logrotate openssh less rsync sdl2_ttf sdl2_image
+sudo pacman -S base-devel git vim inetutils iproute2 iputils procps-ng psmisc sysfsutils which wget unzip mtr traceroute dnsutils lsb-release ca-certificates bash-completion logrotate openssh less rsync
 ```
 
 部分软件是需要自行开启并设置开机自启动的，比如 `OpenSSH`：
@@ -82,97 +104,13 @@ sudo pacman -S git base-devel vi vim inetutils iproute2 iputils procps-ng psmisc
 systemctl enable --now sshd
 ```
 
-## 安装浏览器
-
-```bash
-sudo pacman -S firefox
-```
-
-## 解决中文显示乱码
+### 解决中文显示乱码
 
 ```bash
 sudo pacman -S noto-fonts noto-fonts-cjk noto-fonts-emoji
 ```
 
-创建字体配置文件
-
-```bash
-cd ~
-mkdir -p .config/fontconfig
-vim .config/fontconfig/fonts.conf
-```
-
-粘贴以下内容
-
-```txt
-<?xml version='1.0' encoding='UTF-8'?>
-<!DOCTYPE fontconfig SYSTEM 'urn:fontconfig:fonts.dtd'>
-<!-- ${XDG_CONFIG_HOME}/fontconfig/fonts.conf
-        - vim:ft=xml:fenc=utf-8:noet:ts=3:sw=3:
-        -->
-<fontconfig>
- <alias>
-  <family>serif</family>
-  <prefer>
-   <family>Noto Serif</family>
-   <family>Noto Color Emoji</family>
-   <family>Noto Sans CJK SC</family>
-   <family>Noto Sans CJK TC</family>
-   <family>Noto Sans CJK JP</family>
-  </prefer>
- </alias>
- <alias>
-  <family>sans-serif</family>
-  <prefer>
-   <family>Noto Sans</family>
-   <family>Noto Color Emoji</family>
-   <family>Noto Sans CJK SC</family>
-   <family>Noto Sans CJK TC</family>
-   <family>Noto Sans CJK JP</family>
-  </prefer>
- </alias>
- <alias>
-  <family>monospace</family>
-  <prefer>
-   <family>Noto Sans Mono</family>
-   <family>Noto Color Emoji</family>
-   <family>Noto Sans Mono CJK SC</family>
-   <family>Noto Sans Mono CJK TC</family>
-   <family>Noto Sans Mono CJK JP</family>
-  </prefer>
- </alias>
- <match target="font">
-  <edit mode="assign" name="antialias">
-   <bool>true</bool>
-  </edit>
-  <edit mode="assign" name="autohint">
-   <bool>true</bool>
-  </edit>
-  <edit mode="assign" name="dpi">
-   <double>96</double>
-  </edit>
-  <edit mode="assign" name="hinting">
-   <bool>true</bool>
-  </edit>
-  <edit mode="assign" name="hintstyle">
-   <const>hintslight</const>
-  </edit>
-  <edit mode="assign" name="lcdfilter">
-   <const>lcdlight</const>
-  </edit>
-  <edit mode="assign" name="rgba">
-   <const>rgb</const>
-  </edit>
-  <edit mode="assign" name="size">
-   <int>15</int>
-  </edit>
- </match>
- <dir>~/.fonts</dir>
-</fontconfig>
-
-```
-
-然后清理字体缓存
+**然后清理字体缓存**
 
 ```bash
 fc-cache -fv
@@ -180,25 +118,7 @@ fc-cache -fv
 
 > `reboot` 重启
 
-# Clash
-
-## Install clash
-
-```bash
-sudo pacman -S clash
-```
-
-## Start clash
-
-```bash
-clash
-```
-
-会自动下载`Country.mmdb`，失败就多试几次
-
-> clash配置网页`https://clash.razord.top/`
-
-## 设置shell代理
+### 设置shell代理
 
 ```bash
 export http_proxy=127.0.0.1:7890
@@ -206,65 +126,19 @@ export https_proxy=127.0.0.1:7890
 export socks_proxy=127.0.0.1:7890
 ```
 
-> firefox可以通过settings设置代理
-
-# Supervisor
-
-## 1. 安装 `supervisor`
-
-使用 `pacman` 命令来安装：
+### 安装AUR包管理工具yay
 
 ```bash
-sudo pacman -S supervisor
+cd ~
+mkdir -p .local
+mkdir -p .local/opt
+cd .local/opt
+git clone https://aur.archlinux.org/yay.git
+cd yay
+makepkg -si
 ```
 
-## 2. 启用 `supervisord` 服务
-
-安装完成后，使用以下命令启动并启用 `supervisord` 服务：
-
-```bash
-sudo systemctl enable supervisord
-sudo systemctl start supervisord
-```
-
-## 3. 创建进程配置文件
-
-在 `/etc/supervisord.d/` 目录下，创建进程配置文件。例如，如果要管理一个叫 `clash` 的应用，创建文件 `/etc/supervisord.d/clash.ini`：
-
-```ini
-[program:clash]
-command=/usr/bin/clash -d /home/lordhamster/.config/clash
-autostart=true
-autorestart=true
-stderr_logfile=/var/log/clash.log
-stdout_logfile=/var/log/clash.log
-```
-
-- `command`：指定要运行的命令或脚本的路径。
-- `autostart`：设置 `true` 表示在 `supervisord` 启动时自动启动该进程。
-- `autorestart`：设置 `true` 表示在进程意外退出时自动重启。
-- `stderr_logfile` 和 `stdout_logfile`：指定标准错误和标准输出的日志文件路径。
-
-## 4. 重启 `supervisor` 服务
-
-添加或修改配置后，重启 `supervisord` 以应用更改：
-
-```bash
-sudo systemctl restart supervisord
-```
-
-## 5. 管理进程
-
-可以使用 `supervisorctl` 命令来管理各个进程。例如：
-
-```bash
-sudo supervisorctl status
-sudo supervisorctl start clash
-sudo supervisorctl stop clash
-sudo supervisorctl restart clash
-```
-
-# 安装AUR包管理工具yay
+也可以直接安装打包好的二进制包：
 
 ```bash
 cd ~
@@ -276,72 +150,171 @@ cd yay-bin
 makepkg -si
 ```
 
-# 添加Archlinuxcn源
+## 配置keyd
 
-修改 /etc/pacman.conf 文件，加入：
+### Install
+
+```bash
+sudo pacman -S keyd
+```
+
+### Enable and Start
+
+```bash
+sudo systemctl enable keyd
+sudo systemctl start keyd
+```
+
+### Config
+
+Put the following in `/etc/keyd/default.conf`:
 
 ```txt
-[archlinuxcn]
-Server = https://mirrors.tuna.tsinghua.edu.cn/archlinuxcn/$arch
+[ids]
+
+*
+
+[main]
+
+# Maps capslock to escape when pressed and control when held.
+capslock = overload(control, esc)
 ```
 
-然后更新系统并安装 archlinuxcn-keyring 包：
+## 配置Syncthing
+
+### 1. 安装 Syncthing
+
+使用 Pacman 安装：
 
 ```bash
-sudo pacman -Syu
-sudo pacman -S archlinuxcn-keyring
+sudo pacman -S syncthing
 ```
 
-# Hyprland配置
+### 2. 启用和启动服务
 
-## Hyprland配套程式
+将 Syncthing 服务启用并立即启动：
 
 ```bash
-yay -S fcitx5-im fcitx5-pinyin-zhwiki fcitx5-qt fcitx5-gtk fcitx5-chinese-addons xorg xorg-xwayland xdg-desktop-portal-hyprland xdg-desktop-portal-gtk qt5-wayland qt6-wayland qt5ct qt6ct nwg-look
+sudo systemctl enable --now syncthing@lordhamster.service
 ```
 
-這些套件功能如下：
+## ArchLinux桌面环境配置
 
-- fcitx5 中文輸入法
-- xorg, xorg-xwayland X視窗系統，不是所有程式都支援Wayland。
-- xdg-desktop-portal-hyprland, xdg-desktop-portal-gtk 負責檔案選擇器、螢幕共享等功能
-- qt5-wayland ,qt6-wayland 讓QT程式支援Wayland
-- qt5ct, qt6ct 設定QT程式主題
-- nwg-look：設定GTK程式主題
-
-## 编辑Hyprland配置
+### 字体相关
 
 ```bash
-vim ~/.config/hypr/hyprland.conf
+sudo pacman -S ttf-cascadia-code-nerd
 ```
 
-```txt
-exec-once = fcitx5 -d  --replace
-
-
-env = GTK_IM_MODULE, fcitx
-env = QT_IM_MODULE, fcitx
-env = XMODIFIERS, @im=fcitx
-```
-
-## Install HyprPanel
-
-- https://hyprpanel.com/getting_started/installation.html
-
-### 安装aylurs-gtk-shell-git报错
-
-可能是npm网络问题，设置下代理即可
+### Hyprland相关
 
 ```bash
-npm config set proxy=http://127.0.0.1:7890
+sudo pacman -S kitty mako copyq hyprland hyprpaper hypridle hyprlock hyprshot satty hyprpicker hyprland-qtutils xorg-xwayland xdg-desktop-portal-hyprland xdg-desktop-portal-gtk polkit-kde-agent qt5-wayland qt6-wayland qt5ct qt6ct nwg-look udiskie pipewire-pulse
 ```
 
-# Backup
+### waybar相关
 
 ```bash
-sudo pacman -S timeshift grub-btrfs
+sudo pacman -S waybar jq blueberry brightnessctl pavucontrol fuzzel
+```
+
+If have bluetooth enable it
+
+```bash
+ sudo systemctl enable --now bluetooth
+```
+
+### 输入法相关
+
+```bash
+sudo pacman -S fcitx5-im fcitx5-qt fcitx5-gtk fcitx5-chinese-addons fcitx5-rime
 ```
 
 ```bash
-sudo -E timeshift-gtk
+yay -S rime-ice
+```
+
+**Input Method Setup**
+
+```bash
+vim ~/.local/share/fcitx5/rime/default.custom.yaml
+```
+
+Add the following lines to the file:
+
+```yaml
+patch:
+  # 仅使用「雾凇拼音」的默认配置，配置此行即可
+  __include: rime_ice_suggestion:/
+  # 以下根据自己所需自行定义
+  __patch:
+    menu/page_size: 5 #候选词个数
+```
+
+### shell相关
+
+```bash
+sudo pacman -S zsh zsh-autosuggestions zsh-syntax-highlighting zsh-completions fzf fd ripgrep zoxide exa imagemagick
+```
+
+```bash
+yay -S zsh-theme-powerlevel10k
+```
+
+**Change Default Shell**
+
+```bash
+chsh -s $(which zsh)
+```
+
+### 开发相关
+
+```bash
+sudo pacman -S neovim tmux lazygit yazi uv nodejs npm nvm btop tk
+```
+
+### 常用软件
+
+```bash
+sudo pacman -S vivaldi mpv gimp gwenview gnome-calculator obs-studio obsidian
+```
+
+### 美化相关
+
+```bash
+yay -S catppuccin-cursors-mocha catppuccin-gtk-theme-mocha
+```
+
+### dotfiles
+
+```bash
+cd ~
+git clone git@github.com:lordhamster-dev/dotfiles.git
+cd dotfiles
+./install.sh
+```
+
+## 游戏模式
+
+```bash
+sudo pacman -S gamemode
+sudo gpasswd -a lordhamster gamemode
+```
+
+测试gamemode
+
+```bash
+gamemoded -t
+```
+
+查看gamemode状态
+
+```bash
+gamemoded -s
+```
+
+steam中启用gamemode,在steam的启动选项中加入
+
+```bash
+gamemoderun %command%
 ```

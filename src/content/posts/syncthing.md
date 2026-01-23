@@ -1,14 +1,13 @@
 ---
-title: Syncthing
+title: 使用Syncthing搭建私有文件同步系统
 published: 2024-11-18
-description: "Syncthing 是一款开源、轻量级的文件同步工具，适合在多设备间无缝同步文件。"
-tags: [Tool]
+description: Syncthing 是一款开源、轻量级的文件同步工具，适合在多设备间无缝同步文件。以下将分别介绍在 Ubuntu 和 Archlinux 系统上安装与配置 Syncthing 的方法。
+category: 技术
+tags: [tool]
 draft: false
 ---
 
-Syncthing 是一款开源、轻量级的文件同步工具，适合在多设备间无缝同步文件。
-
-# Install
+> Syncthing 是一款开源、轻量级的文件同步工具，适合在多设备间无缝同步文件。以下将分别介绍在 Ubuntu 和 Archlinux 系统上安装与配置 Syncthing 的方法。
 
 ## 在 Ubuntu 上安装 Syncthing
 

@@ -1,9 +1,10 @@
 ---
 title: Markdown Extended Features
 published: 2024-05-01
-description: "Read more about Markdown features in Fuwari"
-tags: [Markdown]
-draft: false
+description: Read more about Markdown features in Fuwari
+category: 技术
+tags: [blog, markdown]
+draft: true
 ---
 
 ## GitHub Repository Cards

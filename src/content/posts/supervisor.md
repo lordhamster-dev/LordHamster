@@ -1,14 +1,15 @@
 ---
-title: Supervisor
+title: Supervisor 进程管理工具：安装、配置与使用指南
 published: 2024-11-07
-description: ""
-tags: [Tool]
+description: Supervisor是一个进程管理工具，用于监控和管理 Unix 系统上的进程，它允许你启动、停止和重启程序，并在程序崩溃时自动重启，非常适合管理长期运行的进程，如 Web 服务、后台任务等。
+category: 技术
+tags: [tool]
 draft: false
 ---
 
-"Supervisor" 是一个进程管理工具，用于监控和管理 Unix 系统上的进程，它允许你启动、停止和重启程序，并在程序崩溃时自动重启，非常适合管理长期运行的进程，如 Web 服务、后台任务等。下面是如何使用 Supervisor 的基本教程：
+> Supervisor是一个进程管理工具，用于监控和管理 Unix 系统上的进程，它允许你启动、停止和重启程序，并在程序崩溃时自动重启，非常适合管理长期运行的进程，如 Web 服务、后台任务等。下面是如何使用 Supervisor 的基本教程：
 
-# 1. 安装 Supervisor
+## 1. 安装 Supervisor
 
 在大多数 Linux 系统上，你可以通过包管理器安装 Supervisor：
 
@@ -23,7 +24,7 @@ sudo apt-get install supervisor
 pip install supervisor
 ```
 
-# 2. 配置 Supervisor
+## 2. 配置 Supervisor
 
 安装完成后，Supervisor 的主配置文件通常位于 `/etc/supervisor/supervisord.conf`。你可以添加单独的程序配置文件来管理多个服务。默认的配置目录是 `/etc/supervisor/conf.d/`。
 
@@ -44,7 +45,7 @@ stderr_logfile=/var/log/my_program.err.log   ; 错误日志路径
 stdout_logfile=/var/log/my_program.out.log   ; 输出日志路径
 ```
 
-# 3. 管理程序
+## 3. 管理程序
 
 在你创建好配置文件后，你需要告诉 Supervisor 重新读取配置文件并启动程序：
 
@@ -62,7 +63,7 @@ sudo supervisorctl restart my_program   # 重启程序
 sudo supervisorctl status               # 查看所有进程的状态
 ```
 
-# 4. 配置 Supervisor Web 界面（可选）
+## 4. 配置 Supervisor Web 界面（可选）
 
 Supervisor 提供了一个简单的 Web 界面来管理和监控进程。你可以在 `supervisord.conf` 中启用这个功能：
 
@@ -75,7 +76,7 @@ password=pass       ; 密码
 
 启用后，你可以通过浏览器访问 `http://<你的服务器IP>:9001` 来管理进程。
 
-# 5. 日常管理
+## 5. 日常管理
 
 你可以使用 `supervisorctl` 命令行工具来日常管理你的程序。常见操作包括启动、停止、重启进程，查看日志等。
 
