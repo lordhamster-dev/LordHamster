@@ -7,6 +7,7 @@
     "start": "astro dev",
     "check": "astro check",
     "build": "astro build && pagefind --site dist",
+    "deploy": "astro build && pagefind --site dist && rsync -avz --delete ./dist/ $BLOG_DEPLOY_TARGET",
     "preview": "astro preview",
     "astro": "astro",
     "type-check": "tsc --noEmit --isolatedDeclarations",

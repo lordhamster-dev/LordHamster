@@ -2,7 +2,7 @@
 title: Linux键盘效率提升：keyd安装与配置详解
 published: 2024-11-20
 description: Linux下轻量级键位重映射工具keyd的安装与配置方法。
-category: 技术 
+category: 技术
 tags: [linux, tool]
 draft: false
 ---
