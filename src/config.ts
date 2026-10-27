@@ -64,6 +64,11 @@ export const profileConfig: ProfileConfig = {
 			icon: "fa6-brands:bilibili",
 			url: "https://space.bilibili.com/13421633",
 		},
+		{
+			name: "Memos",
+			icon: "fa6-solid:comment-dots",
+			url: "https://memos.lordhamster.com",
+		},
 	],
 };
 
