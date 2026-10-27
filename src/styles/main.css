@@ -112,7 +112,7 @@
     }
 }
 
-.custom-md img, #post-cover img, .memo-content img {
+.custom-md img, #post-cover img {
     @apply cursor-zoom-in
 }
 

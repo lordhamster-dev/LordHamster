@@ -2,8 +2,8 @@
 title: UV：Rust编写的Python神器安装配置与使用技巧
 published: 2026-01-23
 description: Rust编写的Python神器UV：安装配置与高效使用技巧
-category: 技术
-tags: [python, tool]
+category:
+tags: [python]
 draft: false
 ---
 

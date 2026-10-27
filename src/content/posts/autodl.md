@@ -2,8 +2,8 @@
 title: AutoDL高效使用手册：GPU租用+Ollama模型部署技巧
 published: 2026-01-23
 description: AutoDL为您提供专业的GPU租用服务，秒级计费、稳定好用，高规格机房，7x24小时服务。更有算法复现社区，一键复现算法。
-category: AI
-tags: [tool]
+category:
+tags: [ai, tool]
 draft: false
 ---
 

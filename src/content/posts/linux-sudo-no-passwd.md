@@ -2,7 +2,7 @@
 title: Linux sudo 免密码
 published: 2024-11-08
 description: Linux sudo 免密码
-category: 技术
+category:
 tags: [linux]
 draft: false
 ---

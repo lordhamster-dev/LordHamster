@@ -2,8 +2,8 @@
 title: Garage搭建教程
 published: 2026-01-29
 description: Garage是一款强大的本地文件管理和分享工具，本文将指导你如何使用docker compose部署Garage。
+category:
 tags: [tool]
-category: 技术
 draft: false
 ---
 

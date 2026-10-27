@@ -2,7 +2,7 @@
 title: Supervisor 进程管理工具：安装、配置与使用指南
 published: 2024-11-07
 description: Supervisor是一个进程管理工具，用于监控和管理 Unix 系统上的进程，它允许你启动、停止和重启程序，并在程序崩溃时自动重启，非常适合管理长期运行的进程，如 Web 服务、后台任务等。
-category: 技术
+category:
 tags: [tool]
 draft: false
 ---

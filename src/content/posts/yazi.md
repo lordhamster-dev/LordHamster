@@ -2,10 +2,11 @@
 title: Yazi：让你的终端文件管理效率起飞
 published: 2025-08-01
 description: 🚀 Yazi 文件管理器 | 效率神器推荐！
-category: 技术
+category:
 tags: [tool]
 draft: false
 ---
+
 ## 🌟 简介
 
 Yazi 是一款超好用的终端文件管理器，让你的命令行操作效率起飞！✨

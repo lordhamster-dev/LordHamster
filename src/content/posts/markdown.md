@@ -2,9 +2,9 @@
 title: Markdown Example
 published: 2023-10-01
 description: A simple example of a Markdown blog post.
-category: 技术
-tags: [blog, markdown]
-draft: true
+category:
+tags: [markdown]
+draft: false
 ---
 
 # 标题
@@ -132,11 +132,12 @@ print("Hello World")
 > ```
 
 效果:
-| 1 | 2 | 3 |
-| ---- | :--: | ---: |
-| 4 | 5 | 6 |
-| 7 | 8 | 9 |
-| 10 | 11 | 12 |
+
+| 1   |  2  |   3 |
+| --- | :-: | --: |
+| 4   |  5  |   6 |
+| 7   |  8  |   9 |
+| 10  | 11  |  12 |
 
 # 支持的HTML元素
 
